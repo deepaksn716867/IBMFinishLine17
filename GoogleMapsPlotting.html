@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>customer locator</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+        .jumbotron {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+
+        * {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .wrapper {
+            margin-top: 35px;
+            /*line-height: 1.2;*/
+        }
+
+        #map {
+            height: 500px;
+            padding: 15px;
+            border: 0px solid black;
+            background-color: #F6F6F6;
+            border-radius: 20px;
+        }
+
+        .row-bottom {
+            margin-bottom: 0px !important;
+        }
+
+        #left-box {
+            border-right: 3px solid teal;
+            padding: 5px;
+        }
+
+        #right-box {
+            margin-left: 30px;
+        }
+
+        #right-box {
+            padding: 5px;
+        }
+
+        #robot {
+            margin-top: 7px;
+        }
+
+        #image1 {}
+
+        #image2 {}
+
+        #image3 {}
+
+        #block {
+            display: inline-block;
+        }
+
+        .block img {
+            margin-top: 80px;
+            margin-left: 80px;
+            margin-right: 80px;
+            margin-bottom: 40px;
+        }
+
+        .block p {
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+            font-size: 18px;
+            color: gray;
+        }
+
+        #connect {
+            text-align: center;
+            margin-top: 40px;
+            position: absolute;
+            top: 500px;
+            left: 500px;
+        }
+
+        i {
+            margin: 5px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+        var map;
+        //var jsonString = " 'data' : [{lat: '33.34',long: '-112.02',name: 'kkk'}, {lat: '32.12',long: '-110.93',name:'lll'},{lat: '31.80',long: '-106.40',name:'dsds'},{lat: '33.93',long: '-118.40',name:'sdd'},{lat: '32.73',long: '-117.17',name:'asda'},{lat: '28.55',long: '-81.33',name: 'sdd'},{lat: '41.90',long: '-87.65',name: 'asdas'}]";
+        var jsonstring = '[{"lat": "33.34","long": "-112.02","name": "kkk"}, {"lat": "32.12","long": "-110.93","name":"lll"}]';
+
+        function initMap() {
+            alert('init called');
+            var myLatLng = {
+                lat: -34.397,
+                lng: 150.644
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: -34.397,
+                    lng: 150.644
+                },
+                zoom: 8
+            });
+
+            /*var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  });*/
+
+        }
+
+        // 	function googleMaps(skills,location)
+        // 	{
+        // 		//alert('google maps called');
+        //     //alert(PlotMap());
+        //     //fullUrl = 'https://authenticjobs.com/api/?api_key=8196bf75da67e8644ad9fecd1412ba73&method=aj.jobs.search&format=json'
+
+        //     console.log(skills[0]+"dsd");
+        //     console.log(location[0]);
+        //     for(i=0;i<skills.length;i++)
+        //     {
+        //       fullUrl += '&keyword='+skills[i].trim();
+        //     }
+        //     for(j=0;j<location.length;j++)
+        //     {
+        //       fullUrl += '&location='+location[j].trim();
+        //     }
+        //     console.log(fullUrl);
+        //     $( "#jumbo" ).hide();
+        // 		$.ajax({
+        // 					type: 'GET',
+        //           dataType: 'jsonp',
+
+        // 					//url: 'https://authenticjobs.com/api/?api_key=8196bf75da67e8644ad9fecd1412ba73&method=aj.jobs.search&keyword=java&format=json',
+        //           url : fullUrl,
+        // 					success: function(jsonstring)
+        // 					{
+        //               console.log(jsonstring);
+        // 							var jsonobj = eval(jsonstring);
+        //               //alert(jsonobj.listings.listing[0].id);
+        // 							var googlemapdata = new Array();
+        // 							var mapOptions = {
+        // 								  center: {lat: 38.83, lng: -77.01},
+        // 								  zoom: 4
+        // 								};
+        // 							var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        // 							var infowindow = new google.maps.InfoWindow();
+        // 							var marker, i;
+        // 							for (i = 0; i < jsonobj.listings.listing.length; i++)
+        // 							{
+        //                 if(jsonobj.listings.listing[i].hasOwnProperty('company') && jsonobj.listings.listing[i].company.hasOwnProperty('location'))
+        //                 {
+        //                   //alert(jsonobj.listings.listing[i].company.location.lat);
+        //   							  marker = new google.maps.Marker({
+        //                   position: new google.maps.LatLng(jsonobj.listings.listing[i].company.location.lat, jsonobj.listings.listing[i].company.location.lng),
+        //     							map: map
+        // 							  });
+
+        // 								google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        // 								return function() {
+        // 								var setcontentlong = "<p><b>Company</b>: " + jsonobj.listings.listing[i].company.name+"</p>" ;
+        //                 setcontentlong += "<p><b>Position</b>: "+"<a href='"+jsonobj.listings.listing[i].url+"'>"+jsonobj.listings.listing[i].title+"</a></p>";
+        //                 console.log(setcontentlong);
+        // 								  infowindow.setContent(setcontentlong);
+        // 								  infowindow.open(map, marker);
+        // 								}
+        // 							  })(marker, i));
+        //               }
+        // 							 }
+        // 					}
+        // 				});
+        // }
+
+
+
+
+        //for indeed apis
+        function googleMaps(skills, location) {
+            //alert('google maps called');
+            //alert(PlotMap());
+            fullUrl = 'http://api.indeed.com/ads/apisearch?publisher=7446674774997177&sort=&radius=&st=&jt=&start=&limit=100&fromage=&filter=&latlong=1&co=us&chnl=&userip=1.2.3.4&useragent=Mozilla/%2F4.0%28Firefox%29&v=2&format=json';
+
+            console.log(skills[0] + "dsd");
+            console.log(location[0]);
+            for (i = 0; i < skills.length; i++) {
+                fullUrl += '&q=' + skills[i].trim();
+            }
+            for (j = 0; j < location.length; j++) {
+                fullUrl += '&l=' + location[j].trim();
+            }
+            console.log(fullUrl);
+            $("#jumbo").hide();
+            $.ajax({
+                type: 'GET',
+                dataType: 'jsonp',
+
+                //url: 'https://authenticjobs.com/api/?api_key=8196bf75da67e8644ad9fecd1412ba73&method=aj.jobs.search&keyword=java&format=json',
+                url: fullUrl,
+                success: function(jsonstring) {
+                    console.log(jsonstring);
+                    var jsonobj = eval(jsonstring);
+                    //alert(jsonobj.listings.listing[0].id);
+                    var googlemapdata = new Array();
+                    var mapOptions = {
+                        center: {
+                            lat: 38.83,
+                            lng: -96.01
+                        },
+                        zoom: 4
+                    };
+                    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                    var infowindow = new google.maps.InfoWindow();
+                    var marker, i;
+                    var results = jsonobj.results;
+                    for (i = 0; i < results.length; i++) {
+                        if (results[i].hasOwnProperty('latitude') && results[i].hasOwnProperty('longitude')) {
+                            //alert(jsonobj.listings.listing[i].company.location.lat);
+                            marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(results[i].latitude, results[i].longitude),
+                                map: map
+                            });
+
+                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                return function() {
+                                    var setcontentlong = "<p><b>Company</b>: " + results[i].company + "</p>";
+                                    setcontentlong += "<p><b>Position</b>: " + "<a href='" + results[i].url + "'>" + results[i].jobtitle + "</a></p>";
+                                    console.log(setcontentlong);
+                                    infowindow.setContent(setcontentlong);
+                                    infowindow.open(map, marker);
+                                }
+                            })(marker, i));
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function PlotMap(searchQuery) {
+            console.log("plot called");
+            // alert(searchQuery);
+            var result;
+            $.ajax({
+                url: 'https://gateway-a.watsonplatform.net/visual-recognition/api/v3/detect_faces?api_key=ba199ffda2e718f3cb4f2e8e84bfe5ea33b69404&version=2016-05-20',
+                async: false,
+                data: {
+                  'images_file' : '@/Users/deepak/Downloads/prez.jpg'
+                    //'q': searchQuery,
+                    //'access_token': 'ILFXAC47HW5DWDN4GJB5CIMTG4PUMVMC'
+                },
+                method: "POST",
+                dataType: 'jsonp',
+                success: function(response) {
+                    console.log("ajax returned");
+                    result = handleData(response);
+                    console.log(result);
+                    return googleMaps(result.skill, result.location);
+                    //  console.log(result);
+                }
+            });
+            console.log("gonna return");
+            //return result;
+        }
+
+
+
+
+        function handleData(response) {
+            var skillList = new Array();
+            $.each(response["entities"]["skill"], function(i, obj) {
+                skillList.push(obj.value)
+            });
+
+            var locationList = new Array();
+            $.each(response["entities"]["location"], function(i, obj) {
+                locationList.push(obj.value)
+            });
+
+            var fields = {
+                skill: skillList,
+                location: locationList
+            }
+            return fields;
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnRMUTTnPIsbv48o5Ljg2USpUKMJfLqK8">
+    </script>
+
+</head>
+
+<body>
+
+    <!-- <p class="lead">Have you ever thought finding your next job would get so easier??</p> -->
+    <div class="wrapper">
+        <div class="container settings">
+            <div class="row row-bottom">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s11" style="margin: auto">
+                            <input id="search" type="text" name="search" class="validate">
+                            <label for="search_field"> What's your Question? </label>
+                        </div>
+                        <a id="search_button" class="btn-floating btn-large waves-effect waves-light teal lighten-4" onclick="PlotMap(document.getElementById('search').value);"> <img id="robot" src="./src.png" style="width: 40px" /></a>
+                        <!-- <img src="./src.png" style="width: 40px"/> -->
+
+                    </div>
+                </form>
+            </div>
+            <div class="row row-bottom">
+                <div class="col s6" id="left-box"> I'm your AI Bot. Type in your question and we will fetch you data that suits your needs the best. </div>
+                <div class="col s4" id="right-box"> Try, Find Java Jobs in Los Angeles. </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="row" id="map">
+                <div class="block col s4">
+                    <img id="image1" src="./briefcase.png" style="width: 100px" />
+                    <p> Skills </p>
+                </div>
+                <div class="block col s4">
+                    <img id="image2" src="./computer.png" style="width: 100px" />
+                    <p> Companies </p>
+
+                </div>
+                <div class="block col s4">
+                    <img id="image3" src="./locations.png" style="width: 100px" />
+                    <p> Locations </p>
+                </div>
+
+                <!-- <div id="connect">
+                    <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+                    <i class="fa fa-facebook fa-1x" aria-hidden="true"></i>
+                    <i class="fa fa-linkedin fa-1x" aria-hidden="true"></i>
+                    <i class="fa fa-youtube fa-1x" aria-hidden="true"></i>
+                </div> -->
+
+            </div>
+            <small>
+          Icons made by <a href="http://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        </small>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    </div>
+    <div>
+
+
+
+</body>
+
+</html>
